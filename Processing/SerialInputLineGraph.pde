@@ -17,6 +17,8 @@
  import processing.serial.*;
  
  PGraphics topLayer;    // Initialize a new layer
+ PrintWriter output;    // Initialize a new writer
+ 
  Serial myPort;         // The serial port
  int xPos = 1;          // horizontal position of the graph
  
@@ -42,6 +44,9 @@ void setup () {
   // set the window size:
   size(500, 256);
   smooth();
+
+  String outFileName = "positions.txt";
+  output = createWriter(outFileName);
 
   // List all the available serial ports
   // if using Processing 2.1 or later, use Serial.printArray()
@@ -95,6 +100,7 @@ void serialEvent (Serial myPort) {
     // trim off any whitespace:
     inString = trim(inString);
   }
+  output.println(inString);
    
   // convert to an int and map to the screen height:
   float inByte = float(inString);
@@ -130,6 +136,9 @@ void serialEvent (Serial myPort) {
     R = int(random(0, 255));
     G = int(random(0, 255));
     B = int(random(0, 255));
+    
+    output.println("End of the READ");
+    output.flush();
   }
   else {
     // increment the horizontal position:
